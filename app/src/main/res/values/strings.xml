@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MoneySense</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_settings">Notifications</string>
+    <string name="done">Done</string>
+    <string name="listen">Listen again\n</string>
+</resources>
