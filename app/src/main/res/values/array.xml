@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="simple_items">
+        <item>VND</item>
+        <item>USD</item>
+    </array>
+</resources>

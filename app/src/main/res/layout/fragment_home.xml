@@ -1,107 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="383dp"
-        android:layout_height="209dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline4"
-        tools:src="@tools:sample/backgrounds/scenic" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="80dp"
-        android:layout_height="56dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="90dp"
-        android:text="@string/done"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/cameraButton"
-        app:layout_constraintTop_toBottomOf="@+id/convertedMoney"
-        app:layout_constraintVertical_bias="0.047" />
-
-    <ImageButton
-        android:id="@+id/listenButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="90dp"
-        android:contentDescription="@string/listen"
-        android:src="@drawable/ic_listen"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/convertedMoney"
-        app:layout_constraintVertical_bias="0.0" />
+    <androidx.camera.view.PreviewView
+        android:id="@+id/viewFinder"
+        android:layout_width="402dp"
+        android:layout_height="460dp" />
 
     <TextView
         android:id="@+id/recognizedMoney"
-        android:layout_width="266dp"
-        android:layout_height="31dp"
-        android:layout_marginTop="68dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-    <TextView
-        android:id="@+id/convertedMoney"
-        android:layout_width="179dp"
-        android:layout_height="23dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="32dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toStartOf="@+id/currencySpinner"
-        app:layout_constraintHorizontal_bias="0.986"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toText" />
+        android:layout_width="297dp"
+        android:layout_height="45dp"
+        android:textAlignment="center"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/toText"
-        android:layout_width="110dp"
-        android:layout_height="26dp"
-        android:layout_marginTop="30dp"
-        android:text="TO"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recognizedMoney" />
+        android:layout_width="103dp"
+        android:layout_height="38dp"
+        android:text="TO" />
 
-    <Spinner
-        android:id="@+id/currencySpinner"
-        android:layout_width="78dp"
-        android:layout_height="23dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="84dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/convertedMoney"
-        app:layout_constraintTop_toBottomOf="@+id/toText" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-    <ImageButton
-        android:id="@+id/cameraButton"
+        <TextView
+            android:id="@+id/convertedMoney"
+            android:layout_width="195dp"
+            android:layout_height="53dp"
+            android:text="TextView" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/currencyExchange"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <AutoCompleteTextView
+                android:layout_width="157dp"
+                android:layout_height="61dp"
+                android:inputType="none"
+                app:simpleItems="@array/simple_items" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    <Button
+        android:id="@+id/doneButton"
+        style="?attr/materialIconButtonFilledStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="90dp"
-        android:src="@drawable/ic_camera"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/listenButton"
-        app:layout_constraintTop_toBottomOf="@+id/convertedMoney"
-        app:layout_constraintVertical_bias="0.047" />
+        android:contentDescription="Mark the action as done"
+        app:icon="@drawable/baseline_done_24"
+        app:iconSize="30dp" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline4"
+    <Button
+        android:id="@+id/listenButton"
+        style="?attr/materialIconButtonFilledStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="70dp" />
+        android:contentDescription="@string/listen"
+        app:icon="@drawable/ic_listen"
+        app:iconSize="30dp" />
+    </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
