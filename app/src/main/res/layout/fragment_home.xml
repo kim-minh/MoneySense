@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
 
     <androidx.camera.view.PreviewView
         android:id="@+id/viewFinder"
-        android:layout_width="402dp"
+        android:layout_width="match_parent"
         android:layout_height="460dp" />
 
     <TextView
@@ -17,41 +16,42 @@
         android:layout_width="297dp"
         android:layout_height="45dp"
         android:textAlignment="center"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="57dp"
+        tools:layout_editor_absoluteY="487dp" />
+
 
     <TextView
         android:id="@+id/toText"
         android:layout_width="103dp"
         android:layout_height="38dp"
-        android:text="TO" />
+        android:text="TO"
+        tools:layout_editor_absoluteX="154dp"
+        tools:layout_editor_absoluteY="532dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+    <TextView
+        android:id="@+id/convertedMoney"
+        android:layout_width="195dp"
+        android:layout_height="53dp"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="38dp"
+        tools:layout_editor_absoluteY="579dp" />
 
-        <TextView
-            android:id="@+id/convertedMoney"
-            android:layout_width="195dp"
-            android:layout_height="53dp"
-            android:text="TextView" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/currencyExchange"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="233dp"
+        tools:layout_editor_absoluteY="587dp">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/currencyExchange"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+        <AutoCompleteTextView
+            android:layout_width="157dp"
+            android:layout_height="61dp"
+            android:inputType="none"
+            app:simpleItems="@array/simple_items" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-            <AutoCompleteTextView
-                android:layout_width="157dp"
-                android:layout_height="61dp"
-                android:inputType="none"
-                app:simpleItems="@array/simple_items" />
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
     <Button
         android:id="@+id/doneButton"
         style="?attr/materialIconButtonFilledStyle"
@@ -59,7 +59,9 @@
         android:layout_height="wrap_content"
         android:contentDescription="Mark the action as done"
         app:icon="@drawable/baseline_done_24"
-        app:iconSize="30dp" />
+        app:iconSize="30dp"
+        tools:layout_editor_absoluteX="199dp"
+        tools:layout_editor_absoluteY="657dp" />
 
     <Button
         android:id="@+id/listenButton"
@@ -68,7 +70,8 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/listen"
         app:icon="@drawable/ic_listen"
-        app:iconSize="30dp" />
-    </LinearLayout>
+        app:iconSize="30dp"
+        tools:layout_editor_absoluteX="87dp"
+        tools:layout_editor_absoluteY="657dp" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

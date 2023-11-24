@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,12 +20,17 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.mlkit.common.model.LocalModel
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.label.ImageLabeling
 import com.google.mlkit.vision.label.custom.CustomImageLabelerOptions
+import com.kimminh.moneysense.MainActivity
 import com.kimminh.moneysense.databinding.FragmentHomeBinding
+import kotlinx.coroutines.launch
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -63,8 +69,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+        homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -97,9 +102,28 @@ class HomeFragment : Fragment() {
             val imageAnalyzer = ImageAnalysis.Builder()
                 .build()
                 .also {
+                    var lastLabel = ""
                     it.setAnalyzer(cameraExecutor, MoneyAnalyzer { label ->
-                        binding.recognizedMoney.text = label
-                        Log.d(TAG, "Money: $label")
+                        if (label != "0") {
+                            lifecycleScope.launch {
+                                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                                    homeViewModel.recognizedMoneyText.collect {
+                                        binding.recognizedMoney.text = label
+                                    }
+                                }
+                            }
+                            binding.recognizedMoney.text = label
+                            if (lastLabel != label) {
+                                lastLabel = label
+                                MainActivity.textToSpeech.speak(
+                                    label,
+                                    TextToSpeech.QUEUE_FLUSH,
+                                    null,
+                                    null
+                                )
+                            }
+                            Log.d(TAG, "Money: $label")
+                        }
                     })
                 }
 
@@ -131,6 +155,8 @@ class HomeFragment : Fragment() {
     }
 
     companion object {
+        private lateinit var homeViewModel: HomeViewModel
+
         private const val TAG = "Money Classification"
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private val REQUIRED_PERMISSIONS =
@@ -145,12 +171,12 @@ class HomeFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        cameraExecutor.shutdown()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        cameraExecutor.shutdown()
     }
 
 }
