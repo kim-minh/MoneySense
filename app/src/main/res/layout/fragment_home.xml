@@ -31,7 +31,7 @@
         android:id="@+id/toText"
         android:layout_width="103dp"
         android:layout_height="38dp"
-        android:text="TO"
+        android:text="@string/convert_to"
         app:layout_constraintBaseline_toBaselineOf="@+id/currencyExchange"
         app:layout_constraintEnd_toStartOf="@+id/currencyExchange"
         app:layout_constraintHorizontal_bias="0.5"
@@ -41,7 +41,7 @@
         android:id="@+id/convertedMoney"
         android:layout_width="195dp"
         android:layout_height="53dp"
-        android:text="Converted money"
+        android:text="@string/converted_money"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -72,13 +72,13 @@
         android:contentDescription="Mark the action as done"
         app:icon="@drawable/baseline_done_24"
         app:iconSize="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/listenButton"
+        app:layout_constraintBottom_toBottomOf="@+id/btnSpeak"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/listenButton" />
+        app:layout_constraintStart_toEndOf="@+id/btnSpeak" />
 
     <Button
-        android:id="@+id/listenButton"
+        android:id="@+id/btnSpeak"
         style="?attr/materialIconButtonFilledStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -6,4 +6,8 @@
     <string name="done">Done</string>
     <string name="listen">Listen again\n</string>
     <string name="edit_history_button">Edit history button</string>
+    <string name="voice_language">Choose voice language</string>
+    <string name="tts_accent">Choose accent</string>
+    <string name="convert_to">Convert to</string>
+    <string name="converted_money">"Converted money is: "</string>
 </resources>

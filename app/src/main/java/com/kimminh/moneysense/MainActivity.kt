@@ -1,7 +1,13 @@
 package com.kimminh.moneysense
 
+import android.content.Context
+import android.content.Intent
+import android.content.res.Configuration
+import android.content.res.Resources
+import android.os.Build
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.speech.tts.Voice
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
@@ -10,6 +16,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.kimminh.moneysense.databinding.ActivityMainBinding
+import com.kimminh.moneysense.ui.settings.SettingsFragment
 import java.util.Locale
 
 
@@ -36,12 +43,16 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        // Get the language code of the app
+        val appLanguageCode = getCurrentAppLanguageCode()
         textToSpeech = TextToSpeech(this) { status ->
             if (status == TextToSpeech.SUCCESS) {
-                val result = textToSpeech.setLanguage(Locale.ENGLISH)
+                // Set the TTS language
+                val result = textToSpeech.setLanguage(Locale(appLanguageCode))
                 if (result == TextToSpeech.LANG_MISSING_DATA
                     || result == TextToSpeech.LANG_NOT_SUPPORTED
                 ) {
+                    textToSpeech.language = Locale.ENGLISH
                     Log.e("TTS", "Language not supported")
                 }
             } else {
@@ -50,10 +61,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun getCurrentAppLanguageCode(): String? {
+        val sharedPref = getSharedPreferences(SettingsFragment.KEY_SELECTED_LANGUAGE, Context.MODE_PRIVATE)
+        return sharedPref.getString(SettingsFragment.KEY_SELECTED_LANGUAGE, "") ?: ""
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         textToSpeech.stop()
-        textToSpeech.shutdown()
     }
 
     companion object {

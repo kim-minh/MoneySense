@@ -81,6 +81,14 @@ class HomeFragment : Fragment() {
         }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
+        binding.btnSpeak.setOnClickListener{
+            MainActivity.textToSpeech.speak(
+                binding.recognizedMoney.text.toString(),
+                TextToSpeech.QUEUE_FLUSH,
+                null,
+                null
+            )
+        }
 
         return root
     }
