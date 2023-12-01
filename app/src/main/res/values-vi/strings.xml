@@ -5,7 +5,7 @@
     <string name="title_history">Lịch sử</string>
     <string name="title_settings">Cài đặt</string>
     <string name="done">Hoàn tất</string>
-    <string name="listen">Nghe lại[...]</string>
+    <string name="listen">Nghe lại[…]</string>
     <string name="edit_history_button">Sửa lịch sử</string>
     <string name="voice_language">Chọn ngôn ngữ giọng đọc</string>
     <string name="tts_accent">Chọn giọng đọc</string>
@@ -14,6 +14,13 @@
     <string name="when">"Lúc: "</string>
     <string name="money_types">Các loại tờ tiền</string>
     <string name="listen_again">Nghe lại</string>
-    <string name="finish_recognizing_and_calculate_the_sum_of_money">Hoàn tất nhận diện và tính tổng số tiền đã nhận diện</string>
+    <string name="finish">Hoàn tất nhận diện và tính tổng số tiền đã nhận diện</string>
     <string name="delete_history">Xoá lịch sử</string>
+    <string name="confirm_save">Lưu lịch sử</string>
+    <string name="save_message">Bạn có muốn lưu phiên làm việc này vào lịch sử không?</string>
+    <string name="cancel">Huỷ</string>
+    <string name="decline">Từ chối</string>
+    <string name="accept">Đồng ý</string>
+    <string name="confirm_delete">Xoá lịch sử</string>
+    <string name="delete_all_message">Bạn có muốn xoá tất cả lịch sử không? Lịch sử sẽ bị xoá vĩnh viễn.</string>
 </resources>

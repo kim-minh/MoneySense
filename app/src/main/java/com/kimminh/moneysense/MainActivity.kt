@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         textToSpeech = TextToSpeech(this) { status ->
             if (status == TextToSpeech.SUCCESS) {
                 // Set the TTS language
-                val result = textToSpeech.setLanguage(Locale(appLanguageCode))
+                val result = textToSpeech.setLanguage(appLanguageCode?.let { Locale(it) })
                 if (result == TextToSpeech.LANG_MISSING_DATA
                     || result == TextToSpeech.LANG_NOT_SUPPORTED
                 ) {

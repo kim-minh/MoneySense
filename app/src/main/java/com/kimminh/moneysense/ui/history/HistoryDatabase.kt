@@ -10,7 +10,7 @@ abstract class HistoryDatabase : RoomDatabase() {
     abstract fun historyDao(): HistoryDao
     companion object {
         private var INSTANCE: HistoryDatabase? = null
-        fun getDatabase(context: Context): HistoryDatabase{
+        fun getDatabase(context: Context): HistoryDatabase {
             val tempInstance = INSTANCE
             if(tempInstance != null){
                 return tempInstance

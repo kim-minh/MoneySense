@@ -5,17 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.kimminh.moneysense.R
 import com.kimminh.moneysense.databinding.FragmentHistoryBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class HistoryFragment : Fragment() {
-    private lateinit var  mHistoryViewModel: HistoryViewModel
+    private lateinit var  viewModel: HistoryViewModel
 
     private var _binding: FragmentHistoryBinding? = null
 
@@ -36,13 +33,22 @@ class HistoryFragment : Fragment() {
         recyclerView.adapter = historyAdapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        mHistoryViewModel = ViewModelProvider(this).get(HistoryViewModel::class.java)
-        mHistoryViewModel.getAllHistory.observe(viewLifecycleOwner, Observer { history ->
+        viewModel = ViewModelProvider(this)[HistoryViewModel::class.java]
+        viewModel.getAllHistory.observe(viewLifecycleOwner) { history ->
             historyAdapter.setData(history)
-        })
+        }
 
         binding.btnDeleteAll.setOnClickListener{
-            mHistoryViewModel.deleteAll()
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(resources.getString(R.string.confirm_delete))
+                .setMessage(resources.getString(R.string.delete_all_message))
+                .setNegativeButton(resources.getString(R.string.cancel)) { dialog, _ ->
+                    dialog.cancel()
+                }
+                .setPositiveButton(resources.getString(R.string.accept)) { _, _ ->
+                    viewModel.deleteAll()
+                }
+                .show()
         }
 
         return root

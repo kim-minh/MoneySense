@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     style="?attr/materialCardViewFilledStyle"
     android:id="@+id/historyCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="15dp"
-    >
+    android:layout_margin="15dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/historyItem"
@@ -31,7 +29,6 @@
             android:id="@+id/tvDateCreated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="26/01/2023"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/textView"
             app:layout_constraintStart_toEndOf="@+id/textView" />
@@ -40,7 +37,6 @@
             android:id="@+id/tvTotalMoney"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="100000VND"
             android:textSize="25sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

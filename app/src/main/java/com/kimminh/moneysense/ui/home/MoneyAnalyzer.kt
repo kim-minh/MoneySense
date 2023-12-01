@@ -10,17 +10,18 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.label.ImageLabeling
 import com.google.mlkit.vision.label.custom.CustomImageLabelerOptions
 
+@OptIn(ExperimentalGetImage::class)
 class MoneyAnalyzer(private val listener: LabelListener) : ImageAnalysis.Analyzer {
-    val localModel = LocalModel.Builder()
+    private val localModel = LocalModel.Builder()
         .setAssetFilePath("model.tflite")
         .build()
-    val customImageLabelerOptions = CustomImageLabelerOptions.Builder(localModel)
+    private val customImageLabelerOptions = CustomImageLabelerOptions.Builder(localModel)
         .setConfidenceThreshold(0.7f)
         .setMaxResultCount(5)
         .build()
-    val labeler = ImageLabeling.getClient(customImageLabelerOptions)
+    private val labeler = ImageLabeling.getClient(customImageLabelerOptions)
 
-    @OptIn(ExperimentalGetImage::class) override fun analyze(imageProxy: ImageProxy) {
+    override fun analyze(imageProxy: ImageProxy) {
         val mediaImage = imageProxy.image
         if (mediaImage != null) {
             val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)

@@ -1,6 +1,7 @@
 package com.kimminh.moneysense.ui.home
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -18,14 +19,12 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kimminh.moneysense.MainActivity
 import com.kimminh.moneysense.R
 import com.kimminh.moneysense.databinding.FragmentHomeBinding
 import com.kimminh.moneysense.ui.history.HistoryEntity
 import com.kimminh.moneysense.ui.history.HistoryViewModel
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.ExecutorService
@@ -47,7 +46,7 @@ class HomeFragment : Fragment() {
                     permissionGranted = false
             }
             if (!permissionGranted) {
-                Toast.makeText(requireContext(),
+                Toast.makeText(context,
                     "Permission request denied",
                     Toast.LENGTH_SHORT).show()
             } else {
@@ -56,12 +55,13 @@ class HomeFragment : Fragment() {
         }
 
     private var _binding: FragmentHomeBinding? = null
+    private lateinit var context: Context
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
     private val recognizedMoney = mutableListOf<String>()
-    private lateinit var mHistoryViewModel: HistoryViewModel
+    private lateinit var historyViewModel: HistoryViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,9 +71,9 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        context = requireContext()
 
-
-        mHistoryViewModel = ViewModelProvider(this).get(HistoryViewModel::class.java)
+        historyViewModel = ViewModelProvider(this)[HistoryViewModel::class.java]
         if (allPermissionsGranted()) {
             startCamera()
         } else {
@@ -83,7 +83,7 @@ class HomeFragment : Fragment() {
         cameraExecutor = Executors.newSingleThreadExecutor()
         binding.btnSpeak.setOnClickListener{
             MainActivity.textToSpeech.speak(
-                binding.recognizedMoney.text.toString(),
+                binding.recognizedMoney.text,
                 TextToSpeech.QUEUE_FLUSH,
                 null,
                 null
@@ -104,11 +104,25 @@ class HomeFragment : Fragment() {
 
                 numericPart
             }
-            val formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY HH:mm")
-            val concatenatedString = recognizedMoney.joinToString(", ")
-            val newHistoryEntity = HistoryEntity(0,LocalDateTime.now().format(formatter),sum.toString(),concatenatedString)
-            mHistoryViewModel.addHistory(newHistoryEntity)
-            recognizedMoney.clear()
+
+            MaterialAlertDialogBuilder(context)
+                .setTitle(resources.getString(R.string.confirm_save))
+                .setMessage(resources.getString(R.string.save_message))
+                .setNeutralButton(resources.getString(R.string.cancel)) { dialog, _ ->
+                    // Respond to neutral button press
+                    dialog.cancel()
+                }
+                .setNegativeButton(resources.getString(R.string.decline)) { _, _ ->
+                    recognizedMoney.clear()
+                }
+                .setPositiveButton(resources.getString(R.string.accept)) { _, _ ->
+                    val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+                    val concatenatedString = recognizedMoney.joinToString(", ")
+                    val newHistoryEntity = HistoryEntity(0,LocalDateTime.now().format(formatter),sum.toString(),concatenatedString)
+                    historyViewModel.addHistory(newHistoryEntity)
+                    recognizedMoney.clear()
+                }
+                .show()
         }
 
         return root
@@ -116,7 +130,7 @@ class HomeFragment : Fragment() {
 
 
     private fun startCamera() {
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
 
         cameraProviderFuture.addListener({
             // Used to bind the lifecycle of cameras to the lifecycle owner
@@ -166,7 +180,7 @@ class HomeFragment : Fragment() {
                 Log.e(TAG, "Use case binding failed", exc)
             }
 
-        }, ContextCompat.getMainExecutor(requireContext()))
+        }, ContextCompat.getMainExecutor(context))
     }
 
     private fun requestPermissions() {
@@ -175,7 +189,7 @@ class HomeFragment : Fragment() {
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
-            requireContext(), it) == PackageManager.PERMISSION_GRANTED
+            context, it) == PackageManager.PERMISSION_GRANTED
     }
 
     companion object {
@@ -189,10 +203,6 @@ class HomeFragment : Fragment() {
                     add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 }
             }.toTypedArray()
-    }
-
-    override fun onPause() {
-        super.onPause()
     }
 
     override fun onDestroyView() {

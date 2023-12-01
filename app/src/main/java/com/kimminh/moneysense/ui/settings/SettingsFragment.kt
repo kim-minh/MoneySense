@@ -5,9 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.speech.tts.TextToSpeech
 import android.speech.tts.Voice
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +14,6 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import com.kimminh.moneysense.MainActivity
 import com.kimminh.moneysense.databinding.FragmentSettingsBinding
-import java.util.Locale
 
 class SettingsFragment : Fragment() {
 
@@ -68,11 +65,11 @@ class SettingsFragment : Fragment() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedLang = parent?.getItemAtPosition(position).toString()
                 if (selectedLang == "Tiếng Việt") {
-                    applyNewChanges(requireActivity(), "vi")
-                    saveSelectedLanguage(requireContext(),"vi")
+                    applyNewChanges(requireActivity())
+                    saveSelectedLanguage("vi")
                 }else if(selectedLang == "English"){
-                    applyNewChanges(requireActivity(),"en")
-                    saveSelectedLanguage(requireContext(),"en")
+                    applyNewChanges(requireActivity())
+                    saveSelectedLanguage("en")
                 }
             }
 
@@ -103,14 +100,14 @@ class SettingsFragment : Fragment() {
         _binding = null
     }
 
-    private fun applyNewChanges(activity: Activity, langCode: String) {
+    private fun applyNewChanges(activity: Activity) {
         // Restart the activity to apply the language change
         val intent = Intent(activity, activity.javaClass)
         activity.finish()
         activity.startActivity(intent)
     }
 
-    private fun saveSelectedLanguage(context: Context, selectedLanguage: String) {
+    private fun saveSelectedLanguage(selectedLanguage: String) {
         with (sharedPreferences.edit()) {
             putString("selected_language", selectedLanguage)
             apply()
