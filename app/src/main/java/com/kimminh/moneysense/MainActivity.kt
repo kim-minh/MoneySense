@@ -1,13 +1,8 @@
 package com.kimminh.moneysense
 
 import android.content.Context
-import android.content.Intent
-import android.content.res.Configuration
-import android.content.res.Resources
-import android.os.Build
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
-import android.speech.tts.Voice
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
@@ -37,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_settings
+                R.id.navigation_home, R.id.navigation_history, R.id.navigation_settings
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

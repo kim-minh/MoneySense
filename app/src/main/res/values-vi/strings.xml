@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">MoneySense</string>
     <string name="title_home">Trang chủ</string>
-    <string name="title_dashboard">Bảng điều khiển</string>
+    <string name="title_history">Lịch sử</string>
     <string name="title_settings">Cài đặt</string>
     <string name="done">Hoàn tất</string>
     <string name="listen">Nghe lại[...]</string>
@@ -11,4 +11,9 @@
     <string name="tts_accent">Chọn giọng đọc</string>
     <string name="convert_to">Chuyển đổi sang</string>
     <string name="converted_money">"Tiền được chuyển đổi là: "</string>
+    <string name="when">"Lúc: "</string>
+    <string name="money_types">Các loại tờ tiền</string>
+    <string name="listen_again">Nghe lại</string>
+    <string name="finish_recognizing_and_calculate_the_sum_of_money">Hoàn tất nhận diện và tính tổng số tiền đã nhận diện</string>
+    <string name="delete_history">Xoá lịch sử</string>
 </resources>

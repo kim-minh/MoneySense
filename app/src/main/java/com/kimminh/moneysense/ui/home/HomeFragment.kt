@@ -11,26 +11,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.OptIn
 import androidx.camera.core.CameraSelector
-import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import com.google.mlkit.common.model.LocalModel
-import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.label.ImageLabeling
-import com.google.mlkit.vision.label.custom.CustomImageLabelerOptions
+import androidx.navigation.fragment.findNavController
 import com.kimminh.moneysense.MainActivity
+import com.kimminh.moneysense.R
 import com.kimminh.moneysense.databinding.FragmentHomeBinding
+import com.kimminh.moneysense.ui.history.HistoryEntity
+import com.kimminh.moneysense.ui.history.HistoryViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -63,17 +60,20 @@ class HomeFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private val recognizedMoney = mutableListOf<String>()
+    private lateinit var mHistoryViewModel: HistoryViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+
+        mHistoryViewModel = ViewModelProvider(this).get(HistoryViewModel::class.java)
         if (allPermissionsGranted()) {
             startCamera()
         } else {
@@ -90,8 +90,30 @@ class HomeFragment : Fragment() {
             )
         }
 
+        binding.doneButton.setOnClickListener {
+            binding.convertedMoney.text = recognizedMoney.toString()
+
+            val sum = recognizedMoney.sumOf { money ->
+                // Remove ',' and last 3 characters from the money string
+                val cleanedMoneyString = money.replace(",", "").substring(0, money.length - 4)
+
+                // Convert to Int, default to 0 if conversion fails
+                val numericPart = cleanedMoneyString.toIntOrNull() ?: 0
+
+                Log.d("String to Int", "Original String: $money, Cleaned String: $cleanedMoneyString, Int Value: $numericPart")
+
+                numericPart
+            }
+            val formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY HH:mm")
+            val concatenatedString = recognizedMoney.joinToString(", ")
+            val newHistoryEntity = HistoryEntity(0,LocalDateTime.now().format(formatter),sum.toString(),concatenatedString)
+            mHistoryViewModel.addHistory(newHistoryEntity)
+            recognizedMoney.clear()
+        }
+
         return root
     }
+
 
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
@@ -113,16 +135,10 @@ class HomeFragment : Fragment() {
                     var lastLabel = ""
                     it.setAnalyzer(cameraExecutor, MoneyAnalyzer { label ->
                         if (label != "0") {
-                            lifecycleScope.launch {
-                                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                                    homeViewModel.recognizedMoneyText.collect {
-                                        binding.recognizedMoney.text = label
-                                    }
-                                }
-                            }
                             binding.recognizedMoney.text = label
                             if (lastLabel != label) {
                                 lastLabel = label
+                                recognizedMoney.add(label)
                                 MainActivity.textToSpeech.speak(
                                     label,
                                     TextToSpeech.QUEUE_FLUSH,
@@ -163,10 +179,8 @@ class HomeFragment : Fragment() {
     }
 
     companion object {
-        private lateinit var homeViewModel: HomeViewModel
 
         private const val TAG = "Money Classification"
-        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private val REQUIRED_PERMISSIONS =
             mutableListOf (
                 Manifest.permission.CAMERA,
@@ -189,36 +203,3 @@ class HomeFragment : Fragment() {
 
 }
 
-private class MoneyAnalyzer(private val listener: LabelListener) : ImageAnalysis.Analyzer {
-    val localModel = LocalModel.Builder()
-        .setAssetFilePath("model.tflite")
-        .build()
-    val customImageLabelerOptions = CustomImageLabelerOptions.Builder(localModel)
-        .setConfidenceThreshold(0.5f)
-        .setMaxResultCount(5)
-        .build()
-    val labeler = ImageLabeling.getClient(customImageLabelerOptions)
-
-    @OptIn(ExperimentalGetImage::class) override fun analyze(imageProxy: ImageProxy) {
-        val mediaImage = imageProxy.image
-        if (mediaImage != null) {
-            val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
-            // Pass image to an ML Kit Vision API
-            labeler.process(image)
-                .addOnSuccessListener { labels ->
-                    for (label in labels) {
-                        val text = label.text
-                        val confidence = label.confidence
-                        val index = label.index
-                        listener(text.substringAfter(' '))
-                    }
-                }
-                .addOnFailureListener { e ->
-                    Log.e("Classification Error", e.toString())
-                }
-                .addOnCompleteListener {
-                    imageProxy.close()
-                }
-        }
-    }
-}
