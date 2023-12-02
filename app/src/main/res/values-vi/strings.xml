@@ -5,11 +5,11 @@
     <string name="title_history">Lịch sử</string>
     <string name="title_settings">Cài đặt</string>
     <string name="done">Hoàn tất</string>
-    <string name="listen">Nghe lại[…]</string>
+    <string name="listen">Nghe lại</string>
     <string name="edit_history_button">Sửa lịch sử</string>
     <string name="voice_language">Chọn ngôn ngữ giọng đọc</string>
     <string name="tts_accent">Chọn giọng đọc</string>
-    <string name="convert_to">Chuyển đổi sang</string>
+    <string name="VND_to">VND sang</string>
     <string name="converted_money">"Tiền được chuyển đổi là: "</string>
     <string name="when">"Lúc: "</string>
     <string name="money_types">Các loại tờ tiền</string>
@@ -23,4 +23,9 @@
     <string name="accept">Đồng ý</string>
     <string name="confirm_delete">Xoá lịch sử</string>
     <string name="delete_all_message">Xoá tất cả lịch sử? Dữ liệu sẽ bị xoá vĩnh viễn.</string>
+    <string name="select_currency_you_want_to_convert_to">Chọn tiền tệ bạn muốn đổi sang</string>
+    <string name="select">Chọn</string>
+    <string name="reset_counting">Nhấn để tính lại từ đầu</string>
+    <string name="choose_currency_to_convert_to_first_to_see_converted_money">Chọn loại tiền tệ trước để xem tiền được đổi sang</string>
+    <string name="recognized_money">Các tờ tiền đã nhận dạng</string>
 </resources>

@@ -8,7 +8,7 @@
     <string name="edit_history_button">Edit history button</string>
     <string name="voice_language">Choose voice language</string>
     <string name="tts_accent">Choose accent</string>
-    <string name="convert_to">Convert to</string>
+    <string name="VND_to">VND to</string>
     <string name="converted_money">"Converted money is: "</string>
     <string name="when">"At: "</string>
     <string name="money_types">Money types</string>
@@ -21,5 +21,10 @@
     <string name="decline">Decline</string>
     <string name="accept">Accept</string>
     <string name="confirm_delete">Delete history</string>
-    <string name="delete_all_message">Clear all history? This can\'t be reversed.</string>
+    <string name="delete_all_message">Do you want to delete all history? This can\'t be reversed.</string>
+    <string name="select_currency_you_want_to_convert_to">Select currency you want to convert to</string>
+    <string name="select">Select</string>
+    <string name="reset_counting">Click here to reset counting</string>
+    <string name="choose_currency_to_convert_to_first_to_see_converted_money">Choose currency to convert to first, to see converted money</string>
+    <string name="recognized_money">Recognized money:</string>
 </resources>

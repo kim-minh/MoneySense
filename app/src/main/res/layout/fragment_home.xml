@@ -9,43 +9,92 @@
     <androidx.camera.view.PreviewView
         android:id="@+id/viewFinder"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="300dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/recognizedMoney"
-        android:layout_width="297dp"
-        android:layout_height="45dp"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+
+    <Button
+        android:id="@+id/btnSpeak"
+        style="?attr/materialIconButtonFilledStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="28dp"
+        android:contentDescription="@string/listen_again"
+        app:icon="@drawable/ic_listen"
+        app:iconSize="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/doneButton"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewFinder" />
+        app:layout_constraintStart_toEndOf="@+id/btnResetCounting"
+        app:layout_constraintTop_toBottomOf="@+id/tvVND" />
 
-
-    <TextView
-        android:id="@+id/toText"
-        android:layout_width="103dp"
-        android:layout_height="38dp"
-        android:text="@string/convert_to"
-        app:layout_constraintBaseline_toBaselineOf="@+id/currencyExchange"
-        app:layout_constraintEnd_toStartOf="@+id/currencyExchange"
+    <Button
+        android:id="@+id/btnResetCounting"
+        style="?attr/materialIconButtonFilledStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/reset_counting"
+        app:icon="@drawable/ic_reset"
+        app:iconSize="50dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnSpeak"
+        app:layout_constraintEnd_toStartOf="@+id/btnSpeak"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/convertedMoney"
-        android:layout_width="195dp"
-        android:layout_height="53dp"
-        android:text="@string/converted_money"
+    <Button
+        android:id="@+id/doneButton"
+        style="?attr/materialIconButtonFilledStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/finish"
+        app:icon="@drawable/baseline_done_24"
+        app:iconSize="50dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnSpeak"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnSpeak" />
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/currencyExchange" />
+        app:layout_constraintTop_toBottomOf="@+id/viewFinder">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/recognizedMoney"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/recognized_money"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/viewFinder" />
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/tvVND"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/VND_to"
+        android:textSize="40dp"
+        app:layout_constraintBottom_toBottomOf="@+id/currencyExchange"
+        app:layout_constraintEnd_toStartOf="@+id/currencyExchange"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/currencyExchange"
@@ -54,41 +103,16 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/toText"
-        app:layout_constraintTop_toBottomOf="@+id/recognizedMoney">
+        app:layout_constraintStart_toEndOf="@+id/tvVND"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView">
 
         <AutoCompleteTextView
             android:layout_width="157dp"
             android:layout_height="61dp"
+            android:text="USD"
             android:inputType="none"
             app:simpleItems="@array/simple_items" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/doneButton"
-        style="?attr/materialIconButtonFilledStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:icon="@drawable/baseline_done_24"
-        android:contentDescription="@string/finish"
-        app:iconSize="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/btnSpeak"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnSpeak" />
-
-    <Button
-        android:id="@+id/btnSpeak"
-        style="?attr/materialIconButtonFilledStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="92dp"
-        android:contentDescription="@string/listen_again"
-        app:icon="@drawable/ic_listen"
-        app:iconSize="30dp"
-        app:layout_constraintEnd_toStartOf="@+id/doneButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/convertedMoney" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

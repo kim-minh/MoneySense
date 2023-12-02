@@ -62,6 +62,7 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private val recognizedMoney = mutableListOf<String>()
     private lateinit var historyViewModel: HistoryViewModel
+    var currentRecognizedMoney = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -83,7 +84,7 @@ class HomeFragment : Fragment() {
         cameraExecutor = Executors.newSingleThreadExecutor()
         binding.btnSpeak.setOnClickListener{
             MainActivity.textToSpeech.speak(
-                binding.recognizedMoney.text,
+                currentRecognizedMoney,
                 TextToSpeech.QUEUE_FLUSH,
                 null,
                 null
@@ -91,7 +92,6 @@ class HomeFragment : Fragment() {
         }
 
         binding.doneButton.setOnClickListener {
-            binding.convertedMoney.text = recognizedMoney.toString()
 
             val sum = recognizedMoney.sumOf { money ->
                 // Remove ',' and last 3 characters from the money string
@@ -104,6 +104,7 @@ class HomeFragment : Fragment() {
 
                 numericPart
             }
+            binding.recognizedMoney.text = getString(R.string.recognized_money)
 
             MaterialAlertDialogBuilder(context)
                 .setTitle(resources.getString(R.string.confirm_save))
@@ -123,6 +124,11 @@ class HomeFragment : Fragment() {
                     recognizedMoney.clear()
                 }
                 .show()
+        }
+
+        binding.btnResetCounting.setOnClickListener{
+            recognizedMoney.clear()
+            binding.recognizedMoney.text = getString(R.string.recognized_money)
         }
 
         return root
@@ -149,12 +155,17 @@ class HomeFragment : Fragment() {
                     var lastLabel = ""
                     it.setAnalyzer(cameraExecutor, MoneyAnalyzer { label ->
                         if (label != "0") {
-                            binding.recognizedMoney.text = label
                             if (lastLabel != label) {
                                 lastLabel = label
                                 recognizedMoney.add(label)
+                                val cleanedMoneyString = label.replace(",", "").substring(0, label.length - 4)
+                                // Convert to Int, default to 0 if conversion fails
+                                var numericPart = cleanedMoneyString.toFloatOrNull() ?: 0.0f
+                                numericPart /= 22000.0f
+                                currentRecognizedMoney = label +',' + (numericPart).toString()+"USD"
+                                binding.recognizedMoney.text = binding.recognizedMoney.text.toString() +' '+ label
                                 MainActivity.textToSpeech.speak(
-                                    label,
+                                    currentRecognizedMoney,
                                     TextToSpeech.QUEUE_FLUSH,
                                     null,
                                     null
