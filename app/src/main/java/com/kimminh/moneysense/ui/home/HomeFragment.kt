@@ -1,6 +1,7 @@
 package com.kimminh.moneysense.ui.home
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
@@ -126,11 +127,6 @@ class HomeFragment : Fragment() {
                 .show()
         }
 
-        binding.btnResetCounting.setOnClickListener{
-            recognizedMoney.clear()
-            binding.recognizedMoney.text = getString(R.string.recognized_money)
-        }
-
         return root
     }
 
@@ -163,7 +159,7 @@ class HomeFragment : Fragment() {
                                 var numericPart = cleanedMoneyString.toFloatOrNull() ?: 0.0f
                                 numericPart /= 22000.0f
                                 currentRecognizedMoney = label +',' + (numericPart).toString()+"USD"
-                                binding.recognizedMoney.text = binding.recognizedMoney.text.toString() +' '+ label
+                                binding.recognizedMoney.text = "${binding.recognizedMoney.text} $label"
                                 MainActivity.textToSpeech.speak(
                                     currentRecognizedMoney,
                                     TextToSpeech.QUEUE_FLUSH,

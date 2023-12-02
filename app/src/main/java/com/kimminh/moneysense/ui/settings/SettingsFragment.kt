@@ -21,9 +21,6 @@ class SettingsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var sharedPreferences: SharedPreferences
-    // List of voices for English and Vietnamese
-    private val englishVoices = mutableListOf<Voice>()
-    private val vietnameseVoices = mutableListOf<Voice>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

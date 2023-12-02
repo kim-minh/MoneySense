@@ -9,49 +9,33 @@
     <androidx.camera.view.PreviewView
         android:id="@+id/viewFinder"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="381dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <Button
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnSpeak"
-        style="?attr/materialIconButtonFilledStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="28dp"
         android:contentDescription="@string/listen_again"
-        app:icon="@drawable/ic_listen"
-        app:iconSize="80dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/doneButton"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnResetCounting"
-        app:layout_constraintTop_toBottomOf="@+id/tvVND" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvVND"
+        app:layout_constraintVertical_bias="0.69"
+        app:srcCompat="@drawable/ic_listen" />
 
-    <Button
-        android:id="@+id/btnResetCounting"
-        style="?attr/materialIconButtonFilledStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/reset_counting"
-        app:icon="@drawable/ic_reset"
-        app:iconSize="50dp"
-        app:layout_constraintBottom_toBottomOf="@+id/btnSpeak"
-        app:layout_constraintEnd_toStartOf="@+id/btnSpeak"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/doneButton"
-        style="?attr/materialIconButtonFilledStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/finish"
-        app:icon="@drawable/baseline_done_24"
-        app:iconSize="50dp"
+        app:srcCompat="@drawable/baseline_done_24"
         app:layout_constraintBottom_toBottomOf="@+id/btnSpeak"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -60,7 +44,7 @@
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="88dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -90,7 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/VND_to"
-        android:textSize="40dp"
+        android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="@+id/currencyExchange"
         app:layout_constraintEnd_toStartOf="@+id/currencyExchange"
         app:layout_constraintHorizontal_bias="0.5"
