@@ -107,7 +107,7 @@ class HomeFragment : Fragment() {
 
             MaterialAlertDialogBuilder(context)
                 .setTitle(resources.getString(R.string.confirm_save))
-                .setMessage(resources.getString(R.string.save_message))
+                .setMessage(resources.getString(R.string.save_message) + sum)
                 .setNeutralButton(resources.getString(R.string.cancel)) { dialog, _ ->
                     // Respond to neutral button press
                     dialog.cancel()

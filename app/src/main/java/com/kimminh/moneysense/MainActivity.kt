@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         textToSpeech = TextToSpeech(this) { status ->
             if (status == TextToSpeech.SUCCESS) {
                 // Set the TTS language
-                val result = textToSpeech.setLanguage(appLanguageCode?.let { Locale(it) })
+                val result = textToSpeech.setLanguage(Locale(appLanguageCode))
                 if (result == TextToSpeech.LANG_MISSING_DATA
                     || result == TextToSpeech.LANG_NOT_SUPPORTED
                 ) {
@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getCurrentAppLanguageCode(): String? {
+    private fun getCurrentAppLanguageCode(): String {
         val sharedPref = getSharedPreferences(SettingsFragment.KEY_SELECTED_LANGUAGE, Context.MODE_PRIVATE)
         return sharedPref.getString(SettingsFragment.KEY_SELECTED_LANGUAGE, "") ?: ""
     }

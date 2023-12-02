@@ -17,10 +17,10 @@
     <string name="finish">Hoàn tất nhận diện và tính tổng số tiền đã nhận diện</string>
     <string name="delete_history">Xoá lịch sử</string>
     <string name="confirm_save">Lưu lịch sử</string>
-    <string name="save_message">Bạn có muốn lưu phiên làm việc này vào lịch sử không?</string>
+    <string name="save_message">"Lưu phiên làm việc này vào lịch sử? Tổng tiền: "</string>
     <string name="cancel">Huỷ</string>
     <string name="decline">Từ chối</string>
     <string name="accept">Đồng ý</string>
     <string name="confirm_delete">Xoá lịch sử</string>
-    <string name="delete_all_message">Bạn có muốn xoá tất cả lịch sử không? Lịch sử sẽ bị xoá vĩnh viễn.</string>
+    <string name="delete_all_message">Xoá tất cả lịch sử? Dữ liệu sẽ bị xoá vĩnh viễn.</string>
 </resources>
