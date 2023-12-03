@@ -1,6 +1,8 @@
 package com.kimminh.moneysense.ui.history
 
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,7 +40,9 @@ class HistoryFragment : Fragment() {
             historyAdapter.setData(history)
         }
 
+        val vibrator = requireContext().getSystemService(Vibrator::class.java)
         binding.btnDeleteAll.setOnClickListener{
+            vibrator.vibrate(VibrationEffect.createOneShot(150, VibrationEffect.DEFAULT_AMPLITUDE))
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(resources.getString(R.string.confirm_delete))
                 .setMessage(resources.getString(R.string.delete_all_message))

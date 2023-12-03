@@ -1,11 +1,12 @@
 package com.kimminh.moneysense.ui.home
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.LayoutInflater
@@ -57,13 +58,14 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private lateinit var context: Context
+    private lateinit var vibrator: Vibrator
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
     private val recognizedMoney = mutableListOf<String>()
     private lateinit var historyViewModel: HistoryViewModel
-    var currentRecognizedMoney = ""
+    private var currentRecognizedMoney = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,6 +76,7 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
         context = requireContext()
+        vibrator = context.getSystemService(Vibrator::class.java)
 
         historyViewModel = ViewModelProvider(this)[HistoryViewModel::class.java]
         if (allPermissionsGranted()) {
@@ -84,6 +87,8 @@ class HomeFragment : Fragment() {
 
         cameraExecutor = Executors.newSingleThreadExecutor()
         binding.btnSpeak.setOnClickListener{
+            vibrator.vibrate(VibrationEffect.createOneShot(150, VibrationEffect.DEFAULT_AMPLITUDE))
+
             MainActivity.textToSpeech.speak(
                 currentRecognizedMoney,
                 TextToSpeech.QUEUE_FLUSH,
@@ -93,6 +98,7 @@ class HomeFragment : Fragment() {
         }
 
         binding.doneButton.setOnClickListener {
+            vibrator.vibrate(VibrationEffect.createOneShot(150, VibrationEffect.DEFAULT_AMPLITUDE))
 
             val sum = recognizedMoney.sumOf { money ->
                 // Remove ',' and last 3 characters from the money string
@@ -154,12 +160,15 @@ class HomeFragment : Fragment() {
                             if (lastLabel != label) {
                                 lastLabel = label
                                 recognizedMoney.add(label)
+
                                 val cleanedMoneyString = label.replace(",", "").substring(0, label.length - 4)
                                 // Convert to Int, default to 0 if conversion fails
                                 var numericPart = cleanedMoneyString.toFloatOrNull() ?: 0.0f
                                 numericPart /= 22000.0f
                                 currentRecognizedMoney = label +',' + (numericPart).toString()+"USD"
-                                binding.recognizedMoney.text = "${binding.recognizedMoney.text} $label"
+                                val money = "${binding.recognizedMoney.text} $label"
+                                binding.recognizedMoney.text = money
+
                                 MainActivity.textToSpeech.speak(
                                     currentRecognizedMoney,
                                     TextToSpeech.QUEUE_FLUSH,
@@ -200,7 +209,6 @@ class HomeFragment : Fragment() {
     }
 
     companion object {
-
         private const val TAG = "Money Classification"
         private val REQUIRED_PERMISSIONS =
             mutableListOf (

@@ -1,5 +1,6 @@
 package com.kimminh.moneysense.ui.history
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -11,9 +12,11 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.HistoryHolder>() {
     private var historyList = emptyList<HistoryEntity>()
     class HistoryHolder(private val binding: HistoryItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(history: HistoryEntity) {
+            val total = "${history.totalMoney} VND"
+
             binding.tvDateCreated.text = history.date
-            binding.tvTotalMoney.text = history.totalMoney+" VNĐ"
-            binding.tvMoneyTypes.text = binding.root.context.getString(R.string.money_types)+": " +history.moneyTypes
+            binding.tvTotalMoney.text = total
+            binding.tvMoneyTypes.text = binding.root.resources.getString(R.string.money_types, history.moneyTypes)
         }
     }
 
@@ -32,6 +35,7 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.HistoryHolder>() {
         return historyList.size
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setData(history : List<HistoryEntity>){
         this.historyList = history
         notifyDataSetChanged()

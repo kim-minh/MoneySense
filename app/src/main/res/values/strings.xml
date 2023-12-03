@@ -11,20 +11,20 @@
     <string name="VND_to">VND to</string>
     <string name="converted_money">"Converted money is: "</string>
     <string name="when">"At: "</string>
-    <string name="money_types">Money types</string>
+    <string name="money_types">Money types: %1$s</string>
     <string name="listen_again">Listen again</string>
     <string name="finish">Finish recognizing and calculate the sum of money</string>
     <string name="delete_history">Delete history</string>
-    <string name="confirm_save">Save history</string>sử
+    <string name="confirm_save">Save history</string>
     <string name="save_message">"Save this session to history? Total: "</string>
     <string name="cancel">Cancel</string>
     <string name="decline">Decline</string>
     <string name="accept">Accept</string>
     <string name="confirm_delete">Delete history</string>
     <string name="delete_all_message">Do you want to delete all history? This can\'t be reversed.</string>
-    <string name="select_currency_you_want_to_convert_to">Select currency you want to convert to</string>
+    <string name="convert_to_currency">Select currency you want to convert to</string>
     <string name="select">Select</string>
     <string name="reset_counting">Click here to reset counting</string>
-    <string name="choose_currency_to_convert_to_first_to_see_converted_money">Choose currency to convert to first, to see converted money</string>
-    <string name="recognized_money">Recognized money:</string>
+    <string name="choose_currency_warning">Choose currency to convert to first, to see converted money</string>
+    <string name="recognized_money">"Recognized money: "</string>
 </resources>

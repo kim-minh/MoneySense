@@ -31,7 +31,7 @@ class MoneyAnalyzer(private val listener: LabelListener) : ImageAnalysis.Analyze
                     for (label in labels) {
                         val text = label.text
                         val confidence = label.confidence
-                        val index = label.index
+                        Log.d("Confidence", "$text: $confidence")
                         listener(text.substringAfter(' '))
                     }
                 }
