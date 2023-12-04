@@ -9,6 +9,10 @@ import com.google.mlkit.common.model.LocalModel
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.label.ImageLabeling
 import com.google.mlkit.vision.label.custom.CustomImageLabelerOptions
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalGetImage::class)
 class MoneyAnalyzer(private val listener: LabelListener) : ImageAnalysis.Analyzer {
@@ -31,7 +35,7 @@ class MoneyAnalyzer(private val listener: LabelListener) : ImageAnalysis.Analyze
                     for (label in labels) {
                         val text = label.text
                         val confidence = label.confidence
-                        //Log.d("Confidence", "$text: $confidence")
+                        Log.d("Confidence", "$text: $confidence")
                         listener(text.substringAfter(' '))
                     }
                 }
@@ -39,7 +43,10 @@ class MoneyAnalyzer(private val listener: LabelListener) : ImageAnalysis.Analyze
                     Log.e("Classification Error", e.toString())
                 }
                 .addOnCompleteListener {
-                    imageProxy.close()
+                    CoroutineScope(Dispatchers.IO).launch {
+                        delay(2000)
+                        imageProxy.close()
+                    }
                 }
         }
     }

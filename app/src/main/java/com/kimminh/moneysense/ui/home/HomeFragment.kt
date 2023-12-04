@@ -155,37 +155,45 @@ class HomeFragment : Fragment() {
 
             val sum = recognizedMoneyList.sumOf { money ->
                 // Remove ',' and last 3 characters from the money string
-                val cleanedMoneyString = money.replace(",", "").substring(0, money.length - 4)
+                val cleanedMoneyString = money.replace(".", "").substringBefore(" ")
 
                 // Convert to Int, default to 0 if conversion fails
                 val numericPart = cleanedMoneyString.toIntOrNull() ?: 0
+                Log.d("why", numericPart.toString())
 
                 Log.d("String to Int", "Original String: $money, Cleaned String: $cleanedMoneyString, Int Value: $numericPart")
 
                 numericPart
             }
 
+            val currentCurrency = recognizedMoney.substringAfter(" ")
             MaterialAlertDialogBuilder(context)
                 .setTitle(resources.getString(R.string.confirm_save))
-                .setMessage(resources.getString(R.string.save_message) + sum)
+                .setMessage(resources.getString(R.string.save_message) + sum + currentCurrency)
                 .setNeutralButton(resources.getString(R.string.cancel)) { dialog, _ ->
                     // Respond to neutral button press
                     dialog.cancel()
                 }
                 .setNegativeButton(resources.getString(R.string.decline)) { _, _ ->
-                    recognizedMoneyList.clear()
+                    reset()
                 }
                 .setPositiveButton(resources.getString(R.string.accept)) { _, _ ->
                     val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
                     val concatenatedString = recognizedMoneyList.joinToString(", ")
                     val newHistoryEntity = HistoryEntity(0,LocalDateTime.now().format(formatter),sum.toString(),concatenatedString)
                     historyViewModel.addHistory(newHistoryEntity)
-                    recognizedMoneyList.clear()
+                    reset()
                 }
                 .show()
         }
 
         return root
+    }
+
+    private fun reset() {
+        recognizedMoneyList.clear()
+        viewModel.onConverted("")
+        viewModel.onRecognized("")
     }
 
 
@@ -223,7 +231,6 @@ class HomeFragment : Fragment() {
                                     null
                                 )
                             }
-                            Log.d(TAG, "Money: $label")
                         }
                     })
                 }
@@ -240,14 +247,14 @@ class HomeFragment : Fragment() {
                     this, cameraSelector, preview, imageAnalyzer)
 
             } catch(exc: Exception) {
-                Log.e(TAG, "Use case binding failed", exc)
+                Log.e("CameraX", "Use case binding failed", exc)
             }
 
         }, ContextCompat.getMainExecutor(context))
     }
 
     private fun convertMoney(money: String): String {
-        val cleanedMoneyString = money.replace(",", "").substring(0, money.length - 4)
+        val cleanedMoneyString = money.replace(".", "").substringBefore(" ")
         // Convert to Int, default to 0 if conversion fails
         var numericPart = cleanedMoneyString.toFloatOrNull() ?: 0.0f
         numericPart /= 22000.0f
@@ -264,7 +271,6 @@ class HomeFragment : Fragment() {
     }
 
     companion object {
-        private const val TAG = "Money Classification"
         private val REQUIRED_PERMISSIONS =
             mutableListOf (
                 Manifest.permission.CAMERA,
