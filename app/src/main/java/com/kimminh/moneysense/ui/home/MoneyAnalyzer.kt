@@ -16,7 +16,7 @@ class MoneyAnalyzer(private val listener: LabelListener) : ImageAnalysis.Analyze
         .setAssetFilePath("model.tflite")
         .build()
     private val customImageLabelerOptions = CustomImageLabelerOptions.Builder(localModel)
-        .setConfidenceThreshold(0.7f)
+        .setConfidenceThreshold(0.9f)
         .setMaxResultCount(5)
         .build()
     private val labeler = ImageLabeling.getClient(customImageLabelerOptions)
@@ -31,7 +31,7 @@ class MoneyAnalyzer(private val listener: LabelListener) : ImageAnalysis.Analyze
                     for (label in labels) {
                         val text = label.text
                         val confidence = label.confidence
-                        Log.d("Confidence", "$text: $confidence")
+                        //Log.d("Confidence", "$text: $confidence")
                         listener(text.substringAfter(' '))
                     }
                 }

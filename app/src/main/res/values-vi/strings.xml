@@ -10,7 +10,7 @@
     <string name="voice_language">Chọn ngôn ngữ giọng đọc</string>
     <string name="tts_accent">Chọn giọng đọc</string>
     <string name="VND_to">VND sang</string>
-    <string name="converted_money">"Tiền được chuyển đổi là: "</string>
+    <string name="converted_money">"Tiền được chuyển đổi "</string>
     <string name="when">"Lúc: "</string>
     <string name="money_types">Các loại tờ tiền: %1$s</string>
     <string name="listen_again">Nghe lại</string>
@@ -23,9 +23,10 @@
     <string name="accept">Đồng ý</string>
     <string name="confirm_delete">Xoá lịch sử</string>
     <string name="delete_all_message">Xoá tất cả lịch sử? Dữ liệu sẽ bị xoá vĩnh viễn.</string>
-    <string name="convert_to_currency">Chọn tiền tệ bạn muốn đổi sang</string>
+    <string name="convert_to_currency">Chọn tiền tệ</string>
     <string name="select">Chọn</string>
-    <string name="reset_counting">Nhấn để tính lại từ đầu</string>
     <string name="choose_currency_warning">Chọn loại tiền tệ trước để xem tiền được đổi sang</string>
-    <string name="recognized_money">Các tờ tiền đã nhận dạng</string>
+    <string name="recognized_money">Tiền được nhận dạng</string>
+    <string name="convert_button">Chuyển đổi tiền tệ</string>
+    <string name="is_converted_to">Được chuyển thành</string>
 </resources>

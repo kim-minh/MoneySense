@@ -2,5 +2,6 @@
 <resources>
     <array name="simple_items">
         <item>USD</item>
+        <item>VND</item>
     </array>
 </resources>

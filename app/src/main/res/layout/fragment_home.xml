@@ -15,9 +15,60 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/recognizedMoney"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:hint="@string/recognized_money"
+        android:gravity="center"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewFinder" />
+
+    <Button
+        android:id="@+id/convertButton"
+        android:contentDescription="@string/convert_button"
+        style="?attr/materialIconButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/baseline_arrow_downward_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recognizedMoney" />
+
+    <TextView
+        android:id="@+id/convertedMoney"
+        android:layout_width="300dp"
+        android:layout_height="55dp"
+        android:gravity="center"
+        android:textSize="25sp"
+        android:hint="@string/converted_money"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/convertButton" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/currencyExchange"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/convertedMoney"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/convertedMoney"
+        app:layout_constraintTop_toTopOf="@+id/convertedMoney">
+
+        <AutoCompleteTextView
+            android:id="@+id/currency"
+            android:layout_width="wrap_content"
+            android:layout_height="55dp"
+            android:hint="@string/convert_to_currency"
+            android:text="USD"
+            app:simpleItems="@array/simple_items" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnSpeak"
+        android:id="@+id/speak_again_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="28dp"
@@ -26,7 +77,7 @@
         app:layout_constraintEnd_toStartOf="@+id/doneButton"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvVND"
+        app:layout_constraintTop_toBottomOf="@+id/currencyExchange"
         app:layout_constraintVertical_bias="0.69"
         app:srcCompat="@drawable/ic_listen" />
 
@@ -36,67 +87,10 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/finish"
         app:srcCompat="@drawable/baseline_done_24"
-        app:layout_constraintBottom_toBottomOf="@+id/btnSpeak"
+        app:layout_constraintBottom_toBottomOf="@+id/speak_again_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnSpeak" />
-
-    <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="88dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewFinder">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/recognizedMoney"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/recognized_money"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/viewFinder" />
-        </LinearLayout>
-    </ScrollView>
-
-    <TextView
-        android:id="@+id/tvVND"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/VND_to"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toBottomOf="@+id/currencyExchange"
-        app:layout_constraintEnd_toStartOf="@+id/currencyExchange"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/currencyExchange"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/tvVND"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView">
-
-        <AutoCompleteTextView
-            android:layout_width="157dp"
-            android:layout_height="61dp"
-            android:text="USD"
-            android:inputType="none"
-            app:simpleItems="@array/simple_items" />
-    </com.google.android.material.textfield.TextInputLayout>
+        app:layout_constraintStart_toEndOf="@+id/speak_again_button" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

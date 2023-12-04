@@ -20,13 +20,17 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kimminh.moneysense.MainActivity
 import com.kimminh.moneysense.R
 import com.kimminh.moneysense.databinding.FragmentHomeBinding
 import com.kimminh.moneysense.ui.history.HistoryEntity
 import com.kimminh.moneysense.ui.history.HistoryViewModel
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.ExecutorService
@@ -63,9 +67,12 @@ class HomeFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    private val recognizedMoney = mutableListOf<String>()
     private lateinit var historyViewModel: HistoryViewModel
-    private var currentRecognizedMoney = ""
+    private lateinit var viewModel: HomeViewModel
+
+    private val recognizedMoneyList = mutableListOf<String>()
+    private lateinit var recognizedMoney: String
+    private lateinit var convertedMoney: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -79,28 +86,74 @@ class HomeFragment : Fragment() {
         vibrator = context.getSystemService(Vibrator::class.java)
 
         historyViewModel = ViewModelProvider(this)[HistoryViewModel::class.java]
+        viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+
+        cameraExecutor = Executors.newSingleThreadExecutor()
         if (allPermissionsGranted()) {
             startCamera()
         } else {
             requestPermissions()
         }
 
-        cameraExecutor = Executors.newSingleThreadExecutor()
-        binding.btnSpeak.setOnClickListener{
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.recognizedMoney.collect {
+                    binding.recognizedMoney.text = it
+                    recognizedMoney = it
+                }
+            }
+        }
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.convertedMoney.collect {
+                    binding.convertedMoney.text = it
+                    convertedMoney = it
+                }
+            }
+        }
+
+        binding.convertButton.setOnClickListener {
             vibrator.vibrate(VibrationEffect.createOneShot(150, VibrationEffect.DEFAULT_AMPLITUDE))
 
+            viewModel.onConverted(convertMoney(recognizedMoney))
             MainActivity.textToSpeech.speak(
-                currentRecognizedMoney,
+                "$convertedMoney ${binding.currency.text}",
                 TextToSpeech.QUEUE_FLUSH,
                 null,
                 null
             )
         }
 
+        binding.speakAgainButton.setOnClickListener{
+            vibrator.vibrate(VibrationEffect.createOneShot(150, VibrationEffect.DEFAULT_AMPLITUDE))
+
+            if (convertedMoney == "") {
+                MainActivity.textToSpeech.speak(
+                    recognizedMoney,
+                    TextToSpeech.QUEUE_FLUSH,
+                    null,
+                    null
+                )
+            } else {
+                val speech = StringBuilder()
+                    .append(recognizedMoney)
+                    .append(getString(R.string.is_converted_to))
+                    .append(convertedMoney)
+                    .append(binding.currency.text)
+
+                MainActivity.textToSpeech.speak(
+                    speech,
+                    TextToSpeech.QUEUE_FLUSH,
+                    null,
+                    null
+                )
+            }
+        }
+
         binding.doneButton.setOnClickListener {
             vibrator.vibrate(VibrationEffect.createOneShot(150, VibrationEffect.DEFAULT_AMPLITUDE))
 
-            val sum = recognizedMoney.sumOf { money ->
+            val sum = recognizedMoneyList.sumOf { money ->
                 // Remove ',' and last 3 characters from the money string
                 val cleanedMoneyString = money.replace(",", "").substring(0, money.length - 4)
 
@@ -111,7 +164,6 @@ class HomeFragment : Fragment() {
 
                 numericPart
             }
-            binding.recognizedMoney.text = getString(R.string.recognized_money)
 
             MaterialAlertDialogBuilder(context)
                 .setTitle(resources.getString(R.string.confirm_save))
@@ -121,14 +173,14 @@ class HomeFragment : Fragment() {
                     dialog.cancel()
                 }
                 .setNegativeButton(resources.getString(R.string.decline)) { _, _ ->
-                    recognizedMoney.clear()
+                    recognizedMoneyList.clear()
                 }
                 .setPositiveButton(resources.getString(R.string.accept)) { _, _ ->
                     val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
-                    val concatenatedString = recognizedMoney.joinToString(", ")
+                    val concatenatedString = recognizedMoneyList.joinToString(", ")
                     val newHistoryEntity = HistoryEntity(0,LocalDateTime.now().format(formatter),sum.toString(),concatenatedString)
                     historyViewModel.addHistory(newHistoryEntity)
-                    recognizedMoney.clear()
+                    recognizedMoneyList.clear()
                 }
                 .show()
         }
@@ -159,18 +211,13 @@ class HomeFragment : Fragment() {
                         if (label != "0") {
                             if (lastLabel != label) {
                                 lastLabel = label
-                                recognizedMoney.add(label)
+                                viewModel.onConverted("")
 
-                                val cleanedMoneyString = label.replace(",", "").substring(0, label.length - 4)
-                                // Convert to Int, default to 0 if conversion fails
-                                var numericPart = cleanedMoneyString.toFloatOrNull() ?: 0.0f
-                                numericPart /= 22000.0f
-                                currentRecognizedMoney = label +',' + (numericPart).toString()+"USD"
-                                val money = "${binding.recognizedMoney.text} $label"
-                                binding.recognizedMoney.text = money
+                                viewModel.onRecognized(label)
+                                recognizedMoneyList.add(recognizedMoney)
 
                                 MainActivity.textToSpeech.speak(
-                                    currentRecognizedMoney,
+                                    recognizedMoney,
                                     TextToSpeech.QUEUE_FLUSH,
                                     null,
                                     null
@@ -197,6 +244,14 @@ class HomeFragment : Fragment() {
             }
 
         }, ContextCompat.getMainExecutor(context))
+    }
+
+    private fun convertMoney(money: String): String {
+        val cleanedMoneyString = money.replace(",", "").substring(0, money.length - 4)
+        // Convert to Int, default to 0 if conversion fails
+        var numericPart = cleanedMoneyString.toFloatOrNull() ?: 0.0f
+        numericPart /= 22000.0f
+        return String.format("%.2f", numericPart)
     }
 
     private fun requestPermissions() {
