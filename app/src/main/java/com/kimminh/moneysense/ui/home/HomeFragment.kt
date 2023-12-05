@@ -71,8 +71,8 @@ class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel
 
     private val recognizedMoneyList = mutableListOf<String>()
-    private var recognizedMoney: String = ""
-    private var convertedMoney: String = ""
+    private lateinit var recognizedMoney: String
+    private lateinit var convertedMoney: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -87,13 +87,29 @@ class HomeFragment : Fragment() {
 
         historyViewModel = ViewModelProvider(this)[HistoryViewModel::class.java]
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-        collectData()
 
         cameraExecutor = Executors.newSingleThreadExecutor()
         if (allPermissionsGranted()) {
             startCamera()
         } else {
             requestPermissions()
+        }
+
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.recognizedMoney.collect {
+                    binding.recognizedMoney.text = it
+                    recognizedMoney = it
+                }
+            }
+        }
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.convertedMoney.collect {
+                    binding.convertedMoney.text = it
+                    convertedMoney = it
+                }
+            }
         }
 
         binding.convertButton.setOnClickListener {
@@ -252,23 +268,6 @@ class HomeFragment : Fragment() {
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
             context, it) == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun collectData() {
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.convertedMoney.collect {
-                    binding.convertedMoney.text = it
-                    convertedMoney = it
-                }
-            }
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.recognizedMoney.collect {
-                    binding.recognizedMoney.text = it
-                    recognizedMoney = it
-                }
-            }
-        }
     }
 
     companion object {
